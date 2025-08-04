@@ -1,4 +1,4 @@
-import { GalleryVerticalEnd, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ export function LoginForm({
   register?: boolean;
   className?: string;
 }) {
-  const { setToken } = useAuthStore();
+  const { setToken, setUser } = useAuthStore();
   const [state, setState] = useState<AuthUser>({
     name: "",
     email: "",
@@ -40,7 +40,7 @@ export function LoginForm({
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    toast.info("🔄 Login in progress...", {
+    toast("🔄 Connexion en cours...", {
       description: (
         <div className="flex items-center gap-2">
           <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -77,10 +77,11 @@ export function LoginForm({
 
       if (request.status == 200) {
         setToken(response.token);
-        toast.success("✅ Connexion réussie 🎉", {
+        setUser(response.user);
+        toast("✅ Connexion réussie 🎉", {
           description: "Redirection vers le tableau de bord...",
         });
-        navigate("/");
+        navigate("/dashboard");
       } else if (request.status == 401) {
         toast.warning("❌ Connexion échoué", {
           className: "error",
@@ -103,25 +104,16 @@ export function LoginForm({
       <form>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
-            <a
-              href="#"
-              className="flex flex-col items-center gap-2 font-medium"
-            >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-6" />
-              </div>
-              <span className="sr-only">Acadyo.</span>
-            </a>
             <h1 className="text-xl font-bold">Bienvenue sur Acadyo.</h1>
             {register ? (
-              <div className="text-center text-sm">
+              <div className="text-center text-sm text-muted-foreground">
                 Vous avez déjà un compte ?{" "}
                 <a href="/login" className="underline underline-offset-4">
                   Se connecter
                 </a>
               </div>
             ) : (
-              <div className="text-center text-sm">
+              <div className="text-center text-sm text-muted-foreground">
                 Vous n'êtes pas encore inscrit ?{" "}
                 <a href="/register" className="underline underline-offset-4">
                   S'inscrire
@@ -172,7 +164,7 @@ export function LoginForm({
                     setState({ ...state, roles: value })
                   }
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[200px]">
                     <SelectValue placeholder="Choisissez votre rôle" />
                   </SelectTrigger>
                   <SelectContent>
@@ -201,11 +193,11 @@ export function LoginForm({
           </div>
         </div>
       </form>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+      {/* <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         En continuant, vous acceptez nos{" "}
         <a href="#">conditions d'utilisation</a> et notre{" "}
         <a href="#">Politique de confidentialité</a>.
-      </div>
+      </div> */}
     </div>
   );
 }
