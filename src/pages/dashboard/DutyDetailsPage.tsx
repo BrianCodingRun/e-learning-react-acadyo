@@ -1,4 +1,4 @@
-import CourseDetailsComponent from "@/components/CourseDetailsComponent";
+import DutyDetailsComponent from "@/components/DutyDetailsComponent";
 import JoinClassroom from "@/components/JoinClassroom";
 import {
   Breadcrumb,
@@ -26,13 +26,13 @@ import { List, Plus, Presentation } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import type { Classroom } from "types/classroom";
-import type { Course } from "types/Course";
+import type { Duty } from "types/Course";
 
-export default function CourseDetailsPage() {
+export default function DutyDetailsPage() {
   const params = useParams();
   const { token, user } = useAuthStore();
   const [classroomDetails, setClassroomDetails] = useState<Classroom>();
-  const [courseDetails, setCourseDetails] = useState<Course>();
+  const [dutyDetails, setDutyDetails] = useState<Duty>();
 
   useEffect(() => {
     const baseUrl = import.meta.env.VITE_URL_API;
@@ -49,17 +49,16 @@ export default function CourseDetailsPage() {
           }
         );
         const response = await request.json();
-        console.log(response);
         setClassroomDetails(response);
       } catch (error) {
         console.log(error);
       }
     };
-    const fetchCourseDetails = async () => {
+    const fetchDutyDetails = async () => {
       if (!token) return;
       try {
         const request = await fetch(
-          `https://localhost:8000/api/lessons/${params.courseId}`,
+          `https://localhost:8000/api/assignments/${params.dutyId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -69,15 +68,14 @@ export default function CourseDetailsPage() {
         );
         const response = await request.json();
         console.log(response);
-        setCourseDetails(response);
+        setDutyDetails(response);
       } catch (error) {
         console.log(error);
       }
     };
     fetchClassroomDetails();
-    fetchCourseDetails();
+    fetchDutyDetails();
   }, [token, params]);
-
   return (
     <SidebarInset>
       <header className="flex h-16 sticky z-40 bg-sidebar dark:bg-neutral-950 top-0 left-0 shrink-0 items-center justify-between pr-4 gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -104,7 +102,7 @@ export default function CourseDetailsPage() {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbPage>{courseDetails?.title}</BreadcrumbPage>
+                <BreadcrumbPage>{dutyDetails?.title}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -156,7 +154,7 @@ export default function CourseDetailsPage() {
             </DropdownMenu>
           </div>
         )}
-        {courseDetails && <CourseDetailsComponent course={courseDetails} />}
+        {dutyDetails && <DutyDetailsComponent duty={dutyDetails} />}
       </div>
     </SidebarInset>
   );

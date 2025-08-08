@@ -23,7 +23,6 @@ export type HomeWork = {
   "@id": string;
   id: string;
   title: string;
-  content: string;
   instruction: string;
   dueDate: string;
   course: string;
@@ -37,7 +36,6 @@ export type Duty = {
   "@id": string;
   id: string;
   title: string;
-  content: string;
   instruction: string;
   dueDate: string;
   course: string;

@@ -4,9 +4,11 @@ import type { Course } from "types/Course";
 export default function CourseCard({
   imgPath,
   course,
+  classroomId,
 }: {
   imgPath: string;
   course: Course;
+  classroomId: string;
 }) {
   return (
     <Card className="p-0 gap-0">
@@ -25,7 +27,9 @@ export default function CourseCard({
           {course.content.substring(0, 20)}
         </p>
         <div className="p-2 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
-          <a href={`/dashboard/classroom/courses/${course.id}`}>Accéder</a>
+          <a href={`/dashboard/classroom/${classroomId}/courses/${course.id}`}>
+            Accéder
+          </a>
         </div>
       </CardContent>
     </Card>

@@ -6,9 +6,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Bookmark, List, NotebookPen } from "lucide-react";
+import type { Course } from "types/Course";
 
-export default function CourseDetailsComponent() {
+export default function CourseDetailsComponent({ course }: { course: Course }) {
   return (
     <Card className="border-none">
       <CardHeader className="px-0">
@@ -24,12 +24,11 @@ export default function CourseDetailsComponent() {
       <CardContent className="px-0">
         <div className="flex gap-6">
           <div className="flex flex-1/4 flex-col gap-2">
-            <CardTitle className="text-3xl">Méthode Kanban</CardTitle>
+            <CardTitle className="text-3xl">{course.title}</CardTitle>
             <CardDescription className="text-base">
-              Apprenez à organiser un projet en mode agile avec la méthode
-              Kanban.
+              {course.content}
             </CardDescription>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 text-muted-foreground">
                 <NotebookPen className="size-4" />{" "}
                 <span className="text-sm">5 chapitres</span>
@@ -38,9 +37,9 @@ export default function CourseDetailsComponent() {
                 <List className="size-4" />{" "}
                 <span className="text-sm">2 devoirs</span>
               </div>
-            </div>
+            </div> */}
           </div>
-          <div className="flex-2/5">
+          {/* <div className="flex-2/5">
             <div className="flex flex-col w-3/5 gap-6 border border-input rounded-sm p-4 text-muted-foreground">
               <div className="flex gap-1 items-center">
                 <Bookmark />
@@ -52,7 +51,7 @@ export default function CourseDetailsComponent() {
                 <li>Identifier les rôles clés</li>
               </ul>
             </div>
-          </div>
+          </div> */}
         </div>
       </CardContent>
     </Card>

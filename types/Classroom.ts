@@ -1,4 +1,5 @@
 export type Classrooms = {
+  ["@id"]: string;
   id: string;
   title: string;
   description: string;
@@ -11,6 +12,7 @@ export type Classrooms = {
 }[];
 
 export type Classroom = {
+  ["@id"]: string;
   id: string;
   title: string;
   description: string;

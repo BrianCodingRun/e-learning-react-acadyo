@@ -9,8 +9,10 @@ import DashboardLayout from "./layouts/DashboardLayout.tsx";
 import ClassroomPage from "./pages/dashboard/ClassroomPage.tsx";
 import CourseDetailsPage from "./pages/dashboard/CourseDetailsPage.tsx";
 import DashboardPage from "./pages/dashboard/DashboardPage.tsx";
+import DutyDetailsPage from "./pages/dashboard/DutyDetailsPage.tsx";
 import NewClassroomPage from "./pages/dashboard/NewClassroomPage.tsx";
 import NewCoursePage from "./pages/dashboard/NewCoursePage.tsx";
+import NewHomeWorkPage from "./pages/dashboard/NewHomeWorkPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 
@@ -35,11 +37,19 @@ ReactDOM.createRoot(root!).render(
             <Route index element={<DashboardPage />} />
             <Route path="classroom/:classroomId" element={<ClassroomPage />} />
             <Route
-              path="classroom/courses/:id"
+              path="classroom/:classroomId/courses/:courseId"
               element={<CourseDetailsPage />}
             />
+            <Route
+              path="classroom/:classroomId/duty/:dutyId"
+              element={<DutyDetailsPage />}
+            />
             <Route path="classroom/add" element={<NewClassroomPage />} />
-            <Route path="classroom/course/add" element={<NewCoursePage />} />
+            <Route path="classroom/:courseId/add" element={<NewCoursePage />} />
+            <Route
+              path="classroom/homework/:courseId/add"
+              element={<NewHomeWorkPage />}
+            />
           </Route>
         </Route>
       </Routes>

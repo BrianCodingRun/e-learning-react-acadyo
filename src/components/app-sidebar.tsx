@@ -25,7 +25,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const fetchClassroom = async () => {
       try {
         if (!token) return;
-        const baseUrl = "https://localhost:8000/api";
+        const baseUrl = import.meta.env.VITE_URL_API;
         const fetchApi =
           user.roles[0] == "ROLE_TEACHER"
             ? "/courses"

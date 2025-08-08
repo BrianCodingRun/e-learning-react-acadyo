@@ -1,23 +1,18 @@
 import bgCourse2 from "@/assets/learning-bg-card-2.png";
 import bgCourse from "@/assets/learning-bg-card.png";
 import ClassroomCard from "@/components/ClassroomCard";
+import JoinClassroom from "@/components/JoinClassroom";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
-import { FieldGroup } from "@/components/ui/field";
-import {
-  SearchField,
-  SearchFieldClear,
-  SearchFieldInput,
-} from "@/components/ui/searchfield";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
-import { Plus, School2, SearchIcon, XIcon } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Classrooms } from "types/classroom";
 
@@ -29,7 +24,7 @@ export default function DashboardPage() {
     const fetchClassroom = async () => {
       try {
         if (!token) return;
-        const baseUrl = "https://localhost:8000/api";
+        const baseUrl = import.meta.env.VITE_URL_API;
         const fetchApi =
           user.roles[0] == "ROLE_TEACHER"
             ? "/courses"
@@ -74,10 +69,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           {user.roles[0] == "ROLE_STUDENT" ? (
-            <div className="flex items-center gap-1 h-8 px-2 py-4 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-sm text-xs font-light">
-              <School2 className="size-4" />
-              <a href="dashboard/classroom/join">Rejoindre un classroom</a>
-            </div>
+            <JoinClassroom />
           ) : (
             <div className="flex items-center gap-1 h-8 px-2 py-4 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
               <Plus className="size-4" />
@@ -96,18 +88,6 @@ export default function DashboardPage() {
                 : "Créez un nouveau classroom et partager des ressources avec vos étudiant !"}
             </p>
           </div>
-          <SearchField className="md:max-w-[220px] w-full">
-            <FieldGroup>
-              <SearchIcon
-                aria-hidden
-                className="size-4 text-muted-foreground"
-              />
-              <SearchFieldInput placeholder="Rechercher..." />
-              <SearchFieldClear>
-                <XIcon aria-hidden className="size-4" />
-              </SearchFieldClear>
-            </FieldGroup>
-          </SearchField>
         </div>
         <Separator />
         {user.roles[0] != "ROLE_STUDENT" ? (

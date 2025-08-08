@@ -3,15 +3,6 @@ import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
 import { useState } from "react";
@@ -33,38 +24,45 @@ export function LoginForm({
     name: "",
     email: "",
     password: "",
-    roles: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    toast("🔄 Connexion en cours...", {
-      description: (
-        <div className="flex items-center gap-2">
-          <LoaderCircle className="h-4 w-4 animate-spin" />
-          Vérification des identifiants...
-        </div>
-      ),
-    });
+    if (register) {
+      toast("🔄 Inscription en cours...", {
+        description: (
+          <div className="flex items-center gap-2">
+            <LoaderCircle className="h-4 w-4 animate-spin" />
+            L'inscription est en cours, veuillez patientez...
+          </div>
+        ),
+      });
+    } else {
+      toast("🔄 Connexion en cours...", {
+        description: (
+          <div className="flex items-center gap-2">
+            <LoaderCircle className="h-4 w-4 animate-spin" />
+            Vérification des identifiants...
+          </div>
+        ),
+      });
+    }
     try {
+      const baseUrl = import.meta.env.VITE_URL_API;
       const raw = register
         ? JSON.stringify({
+            name: state.name,
             email: state.email,
             password: state.password,
           })
         : JSON.stringify({
-            name: state.name,
             email: state.email,
             password: state.password,
-            roles: state.roles,
           });
 
-      const requestUrl = register
-        ? "https://localhost:8000/api/register"
-        : "https://localhost:8000/api/login";
-
+      const requestUrl = register ? baseUrl + "/register" : baseUrl + "/login";
       const request = await fetch(requestUrl, {
         headers: {
           "Content-Type": "application/json",
@@ -75,18 +73,33 @@ export function LoginForm({
       });
       const response = await request.json();
 
-      if (request.status == 200) {
-        setToken(response.token);
-        setUser(response.user);
-        toast("✅ Connexion réussie 🎉", {
-          description: "Redirection vers le tableau de bord...",
-        });
-        navigate("/dashboard");
+      if (request.status == 200 || request.status == 201) {
+        if (register) {
+          toast("✅ Inscription réussie 🎉", {
+            description: "Redirection vers la page de connexion...",
+          });
+          navigate("/login");
+        } else {
+          setToken(response.token);
+          setUser(response.user);
+          toast("✅ Connexion réussie 🎉", {
+            description: "Redirection vers le tableau de bord...",
+          });
+          navigate("/dashboard");
+        }
       } else if (request.status == 401) {
-        toast.warning("❌ Connexion échoué", {
-          className: "error",
-          description: "L'email où le mot de passe est incorrect",
-        });
+        if (register) {
+          toast.warning("❌ Inscription échoué", {
+            className: "error",
+            description:
+              "Une erreur s'est produite lors de l'inscription, réessayer !",
+          });
+        } else {
+          toast.warning("❌ Connexion échoué", {
+            className: "error",
+            description: "L'email où le mot de passe est incorrect",
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -155,7 +168,7 @@ export function LoginForm({
                 required
               />
             </div>
-            {register && (
+            {/* {register && (
               <div className="grid gap-3">
                 <Label htmlFor="roles">Votre rôle</Label>
                 <Select
@@ -176,7 +189,7 @@ export function LoginForm({
                   </SelectContent>
                 </Select>
               </div>
-            )}
+            )} */}
             <Button
               type="button"
               className="w-full cursor-pointer"

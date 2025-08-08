@@ -4,9 +4,11 @@ import type { Duty } from "types/Course";
 export default function DutyCard({
   imgPath,
   duty,
+  classroomId,
 }: {
   imgPath: string;
   duty: Duty;
+  classroomId: string;
 }) {
   return (
     <Card className="p-0 gap-0">
@@ -25,7 +27,9 @@ export default function DutyCard({
           {duty.instruction.substring(0, 20)}
         </p>
         <div className="p-2 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
-          <a href={`/dashboard/classroom/courses/duty/${duty.id}`}>Accéder</a>
+          <a href={`/dashboard/classroom/${classroomId}/duty/${duty.id}`}>
+            Accéder
+          </a>
         </div>
       </CardContent>
     </Card>

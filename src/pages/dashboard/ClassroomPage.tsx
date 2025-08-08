@@ -2,6 +2,7 @@ import bgCourse2 from "@/assets/learning-bg-card-2.png";
 import bgCourse from "@/assets/learning-bg-card.png";
 import CourseCard from "@/components/CourseCard";
 import DutyCard from "@/components/DutyCard";
+import JoinClassroom from "@/components/JoinClassroom";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -36,9 +37,9 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
-import { List, Plus, Presentation, School2, UserPlus } from "lucide-react";
+import { List, Plus, Presentation, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import type { Classroom } from "types/classroom";
 import type { Courses, HomeWork } from "types/Course";
 import type { EtudiantsClassroom, TeacherClassroom } from "types/User";
@@ -49,13 +50,14 @@ export default function ClassroomPage() {
   const [classroomDetails, setClassroomDetails] = useState<Classroom>();
   const [courses, setCourses] = useState<Courses>([]);
   const [homeWork, setHomeWork] = useState<HomeWork>([]);
+  const [homeWorkAssigned, setHomeWorkAssigned] = useState<HomeWork>([]);
   const [etudiantEnrolled, setEtudiantEnrolled] = useState<EtudiantsClassroom>(
     []
   );
   const [teacher, setTeacher] = useState<TeacherClassroom>();
 
   useEffect(() => {
-    const baseUrl = "https://localhost:8000/api";
+    const baseUrl = import.meta.env.VITE_URL_API;
     const fetchClassroomDetails = async () => {
       if (!token) return;
       try {
@@ -99,8 +101,8 @@ export default function ClassroomPage() {
           },
         });
         const response = await request.json();
-        console.log(response);
         setHomeWork(response.member);
+        setHomeWorkAssigned(response.member);
       } catch (error) {
         console.log(error);
       }
@@ -118,8 +120,6 @@ export default function ClassroomPage() {
           }
         );
         const response = await request.json();
-        console.log(response.students);
-
         setEtudiantEnrolled(response.students);
         setTeacher(response.course.teacher);
       } catch (error) {
@@ -137,12 +137,12 @@ export default function ClassroomPage() {
   const classroomCourses = courses.filter(
     (lesson) => lesson.course === classroomCourseId
   );
-  const etudiantId =
-    etudiantEnrolled && etudiantEnrolled.filter((etudiant) => etudiant.id);
-  const userId = `/api/users/${etudiantId}`;
-  const assignmentUser =
-    homeWork &&
-    homeWork.filter((duty) => duty.assignedTo.filter((a) => a == userId));
+
+  const classroomAssignments = homeWork.filter(
+    (work) => work.course === classroomCourseId
+  );
+
+  const userId = `/api/users/${user.id}`;
 
   return (
     <SidebarInset>
@@ -170,14 +170,11 @@ export default function ClassroomPage() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           {user.roles[0] == "ROLE_STUDENT" ? (
-            <div className="flex items-center gap-1 h-8 px-2 py-4 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-sm text-xs font-light">
-              <School2 className="size-4" />
-              <a href="/classroom/join">Rejoindre un classroom</a>
-            </div>
+            <JoinClassroom />
           ) : (
             <div className="flex items-center gap-1 h-8 px-2 py-4 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
               <Plus className="size-4" />
-              <a href="/courses/add">Créer un classroom</a>
+              <a href="dashboard/classroom/add">Créer un classroom</a>
             </div>
           )}
         </div>
@@ -207,11 +204,19 @@ export default function ClassroomPage() {
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
                       <Presentation />
-                      Support de cours
+                      <Link
+                        to={`/dashboard/classroom/${params.classroomId}/add`}
+                      >
+                        Support de cours
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <List />
-                      Nouveau devoirs
+                      <Link
+                        to={`/dashboard/classroom/homework/${params.classroomId}/add`}
+                      >
+                        Nouveau devoirs
+                      </Link>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
@@ -243,6 +248,7 @@ export default function ClassroomPage() {
                         key={course.id}
                         imgPath={bgCourse2}
                         course={course}
+                        classroomId={params.classroomId as string}
                       />
                     ))
                   ) : (
@@ -251,11 +257,39 @@ export default function ClassroomPage() {
                 </div>
               </div>
               <div className="flex flex-col gap-4 mt-2">
-                <h1 className="text-lg font-light">Mes devoirs</h1>
+                <h1 className="text-lg font-light">
+                  {user.roles[0] == "ROLE_STUDENT"
+                    ? "Mes devoirs"
+                    : "Devoirs créé."}
+                </h1>
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                  {assignmentUser.length > 0 ? (
-                    assignmentUser.map((duty) => (
-                      <DutyCard key={duty.id} duty={duty} imgPath={bgCourse} />
+                  {user.roles[0] == "ROLE_STUDENT" ? (
+                    homeWorkAssigned.length > 0 ? (
+                      homeWorkAssigned
+                        .filter((duty) =>
+                          duty.assignedTo.some(
+                            (assignedUserId) => assignedUserId === userId
+                          )
+                        )
+                        .map((duty) => (
+                          <DutyCard
+                            key={duty.id}
+                            duty={duty}
+                            imgPath={bgCourse}
+                            classroomId={params.classroomId as string}
+                          />
+                        ))
+                    ) : (
+                      <p>Aucun devoirs pour le moment.</p>
+                    )
+                  ) : classroomAssignments.length > 0 ? (
+                    classroomAssignments.map((duty) => (
+                      <DutyCard
+                        key={duty.id}
+                        duty={duty}
+                        imgPath={bgCourse}
+                        classroomId={params.classroomId as string}
+                      />
                     ))
                   ) : (
                     <p>Aucun devoirs pour le moment.</p>
