@@ -12,7 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/auth";
-import type { Classrooms } from "../../types/classroom";
+import type { Classrooms } from "../types/ClassroomType";
 import { Badge } from "./ui/badge";
 
 // This is sample data.

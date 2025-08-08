@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { Course } from "types/Course";
+import type { Course } from "@/types/Course";
 
 export default function CourseDetailsComponent({ course }: { course: Course }) {
   return (

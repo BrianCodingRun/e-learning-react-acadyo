@@ -16,14 +16,14 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
+import type { Classroom } from "@/types/ClassroomType";
+import type { EtudiantsClassroom } from "@/types/User";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon, ChevronsUpDown, LoaderCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import type { Classroom } from "types/classroom";
-import type { EtudiantsClassroom } from "types/User";
 import { z } from "zod";
 import { Checkbox } from "./ui/checkbox";
 import {

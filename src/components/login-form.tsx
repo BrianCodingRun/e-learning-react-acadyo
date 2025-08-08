@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
+import type { AuthUser } from "@/types/AuthUser";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
-import type { AuthUser } from "types/AuthUser";
 
 export function LoginForm({
   className,

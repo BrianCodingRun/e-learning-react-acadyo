@@ -22,11 +22,11 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
+import type { Classroom } from "@/types/ClassroomType";
+import type { Course } from "@/types/Course";
 import { List, Plus, Presentation } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import type { Classroom } from "types/classroom";
-import type { Course } from "types/Course";
 
 export default function CourseDetailsPage() {
   const params = useParams();

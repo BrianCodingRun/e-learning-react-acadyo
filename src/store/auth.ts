@@ -1,4 +1,4 @@
-import type { User } from "types/User";
+import type { User } from "@/types/User";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 

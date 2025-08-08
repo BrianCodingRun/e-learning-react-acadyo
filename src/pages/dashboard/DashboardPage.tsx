@@ -12,9 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
+import type { Classroom, Classrooms } from "@/types/ClassroomType";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { Classrooms } from "types/classroom";
 
 export default function DashboardPage() {
   const { user, token } = useAuthStore();
@@ -95,7 +95,7 @@ export default function DashboardPage() {
             <h1 className="text-lg font-light">Les cours que j'ai créé</h1>
             <div className="grid auto-rows-min gap-4 md:grid-cols-3">
               {classroomData &&
-                classroomData.map((c) => (
+                classroomData.map((c: Classroom) => (
                   <ClassroomCard key={c.id} imgPath={bgCourse2} classroom={c} />
                 ))}
             </div>

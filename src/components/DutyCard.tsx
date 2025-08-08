@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { Duty } from "types/Course";
+import type { Duty } from "@/types/Course";
 
 export default function DutyCard({
   imgPath,

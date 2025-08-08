@@ -16,10 +16,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/store/auth";
+import type { Duty } from "@/types/Course";
 import { Paperclip, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import type { Duty } from "types/Course";
 
 type FilePreview = {
   name: string;

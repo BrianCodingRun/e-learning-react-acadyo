@@ -37,12 +37,12 @@ import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
+import type { Classroom } from "@/types/ClassroomType";
+import type { Courses, HomeWork } from "@/types/Course";
+import type { EtudiantsClassroom, TeacherClassroom } from "@/types/User";
 import { List, Plus, Presentation, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import type { Classroom } from "types/classroom";
-import type { Courses, HomeWork } from "types/Course";
-import type { EtudiantsClassroom, TeacherClassroom } from "types/User";
 
 export default function ClassroomPage() {
   const params = useParams();
