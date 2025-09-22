@@ -7,6 +7,8 @@ import { useAuthStore } from "@/store/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import { z } from "zod";
 import {
   Form,
@@ -37,6 +39,7 @@ export default function ClassroomForm({
   });
 
   const { token } = useAuthStore();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,8 +54,16 @@ export default function ClassroomForm({
     setIsLoading(true);
     if (!token) return;
     const baseUrl = import.meta.env.VITE_URL_API;
+    toast("🔄 Création en cours...", {
+      description: (
+        <div className="flex items-center gap-2">
+          <LoaderCircle className="h-4 w-4 animate-spin" />
+          Le classroom est cours de création !
+        </div>
+      ),
+    });
     try {
-      const request = await fetch(baseUrl + "/courses", {
+      const request = await fetch(baseUrl + "/classroom", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -61,8 +72,18 @@ export default function ClassroomForm({
         body: JSON.stringify(values),
       });
       const response = await request.json();
-      if (request.status == 200) {
+      if (request.status == 201) {
+        toast("✅ Classroom créé 🎉", {
+          description: "Le classroom a été créé avec succès !",
+        });
         console.log(response.message);
+        navigate(`/dashboard/classroom/${response.classroom.id}`);
+      } else if (request.status == 401) {
+        toast.warning("❌ Une erreur est survenue", {
+          className: "error",
+          description:
+            "Une erreur inconnue est survenue, réessayer plus tard !",
+        });
       }
     } catch (error) {
       console.log(error);

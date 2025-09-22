@@ -1,4 +1,5 @@
 import CourseDetailsComponent from "@/components/CourseDetailsComponent";
+import CourseDetailsLoading from "@/components/CourseDetailsLoading";
 import JoinClassroom from "@/components/JoinClassroom";
 import {
   Breadcrumb,
@@ -22,7 +23,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
-import type { Classroom } from "@/types/ClassroomType";
+import type { Classroom } from "@/types/Classroom";
 import type { Course } from "@/types/Course";
 import { List, Plus, Presentation } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -33,6 +34,7 @@ export default function CourseDetailsPage() {
   const { token, user } = useAuthStore();
   const [classroomDetails, setClassroomDetails] = useState<Classroom>();
   const [courseDetails, setCourseDetails] = useState<Course>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const baseUrl = import.meta.env.VITE_URL_API;
@@ -40,7 +42,7 @@ export default function CourseDetailsPage() {
       if (!token) return;
       try {
         const request = await fetch(
-          baseUrl + "/courses/" + params.classroomId,
+          baseUrl + "/classrooms/" + params.classroomId,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,22 +58,24 @@ export default function CourseDetailsPage() {
       }
     };
     const fetchCourseDetails = async () => {
-      if (!token) return;
+      setIsLoading(true);
+      if (!token || !params.courseId) return;
       try {
-        const request = await fetch(
-          `https://localhost:8000/api/lessons/${params.courseId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const request = await fetch(`${baseUrl}/courses/${params.courseId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         const response = await request.json();
         console.log(response);
-        setCourseDetails(response);
+        if (response) {
+          setCourseDetails(response);
+        }
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchClassroomDetails();
@@ -123,7 +127,7 @@ export default function CourseDetailsPage() {
       </header>
       <div className="flex flex-1 flex-col gap-4 p-4 pl-8">
         {user.roles[0] == "ROLE_TEACHER" && (
-          <div className="flex justify-end">
+          <div className="flex justify-start">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="gap-1 rounded-sm cursor-pointer h-8 px-2 py-4 text-xs">
@@ -131,7 +135,7 @@ export default function CourseDetailsPage() {
                   Créer
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-48" align="end">
+              <DropdownMenuContent className="w-48" align="start">
                 <DropdownMenuLabel>Options</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -156,7 +160,11 @@ export default function CourseDetailsPage() {
             </DropdownMenu>
           </div>
         )}
-        {courseDetails && <CourseDetailsComponent course={courseDetails} />}
+        {!isLoading ? (
+          courseDetails && <CourseDetailsComponent course={courseDetails} />
+        ) : (
+          <CourseDetailsLoading />
+        )}
       </div>
     </SidebarInset>
   );

@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
-import type { Classroom } from "@/types/ClassroomType";
+import type { Classroom } from "@/types/Classroom";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -29,12 +29,15 @@ export default function NewCoursePage() {
     const fetchClassroomDetails = async () => {
       if (!token) return;
       try {
-        const request = await fetch(baseUrl + "/courses/" + params.courseId, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const request = await fetch(
+          baseUrl + "/classrooms/" + params.classroomId,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const response = await request.json();
         console.log(response);
         setClassroomDetails(response);

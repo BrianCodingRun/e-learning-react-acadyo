@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
-import type { Classroom } from "@/types/ClassroomType";
+import type { Classroom } from "@/types/Classroom";
 import type { EtudiantsClassroom } from "@/types/User";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon, ChevronsUpDown, LoaderCircle } from "lucide-react";
@@ -36,7 +36,7 @@ import {
 } from "./ui/form";
 import { Textarea } from "./ui/textarea";
 
-export default function HomeWorkForm({
+export default function DutyForm({
   classroom,
   className,
   ...props
@@ -107,7 +107,7 @@ export default function HomeWorkForm({
         instruction: values.instruction,
         assignedTo: values.assignedTo,
         dueDate: values.dueDate,
-        course: `/api/courses/${classroom?.id}`,
+        classroom: `/api/classrooms/${classroom?.id}`,
       };
       const request = await fetch(baseUrl + "/assignments", {
         method: "POST",
@@ -141,7 +141,7 @@ export default function HomeWorkForm({
       if (!token || !classroom?.id) return;
       try {
         const request = await fetch(
-          baseUrl + `/enrollment/course/${classroom.id}/students`,
+          baseUrl + `/enrollment/classroom/${classroom.id}/students`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

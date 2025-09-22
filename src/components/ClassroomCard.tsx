@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { Classroom } from "@/types/ClassroomType";
+import type { Classroom } from "@/types/Classroom";
 
 export default function ClassroomCard({
   imgPath,

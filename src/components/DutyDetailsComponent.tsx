@@ -16,9 +16,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/store/auth";
-import type { Duty } from "@/types/Course";
+import type { Duty } from "@/types/Duty";
 import { Paperclip, Plus } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type FilePreview = {
@@ -29,8 +29,9 @@ type FilePreview = {
 };
 
 export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
-  const { user } = useAuthStore();
+  const { user, token } = useAuthStore();
   const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
+  const baseUrl = import.meta.env.VITE_URL_API;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("Fichier ajouté");
@@ -47,6 +48,25 @@ export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
     });
   };
 
+  const fetchDutyRendered = useCallback(async () => {
+    if (!token || !baseUrl) return;
+    try {
+      const request = await fetch(baseUrl + "/dutyRendered", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await request.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [token, baseUrl]);
+
+  useEffect(() => {
+    fetchDutyRendered();
+  }, [fetchDutyRendered]);
+
   const handleSubmit = async () => {
     if (!filePreview?.file) {
       toast.error("Aucun fichier sélectionné.");
@@ -62,7 +82,7 @@ export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
     formData.append("submittedAt", new Date().toISOString()); // Format ISO standard
 
     try {
-      const response = await fetch("https://localhost:8000/api/submissions", {
+      const response = await fetch(`${baseUrl}/dutyRendered`, {
         method: "POST",
         body: formData,
       });
@@ -76,9 +96,6 @@ export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
       }
 
       toast.success("Devoir envoyé avec succès !");
-      setFilePreview(null); // reset file après envoi
-      const input = document.getElementById("fileUpload") as HTMLInputElement;
-      if (input) input.value = "";
     } catch (error) {
       console.error("Erreur réseau:", error);
       toast.error("Erreur réseau lors de l'envoi.");

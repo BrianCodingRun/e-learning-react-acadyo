@@ -49,24 +49,29 @@ export default function JoinClassroom() {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     if (!token) return;
+    toast("🔄 Inscription en cours", {
+      description: "Vérification que le classroom existe.",
+    });
     try {
-      const request = await fetch(
-        "https://localhost:8000/api/enrollment/join",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        }
-      );
+      const baseUrl = import.meta.env.VITE_URL_API;
+      const request = await fetch(baseUrl + "/enrollment/join", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
       const response = await request.json();
       if (response.success) {
         toast("✅ Inscription réussie 🎉", {
           description: "Redirection vers le classroom !",
         });
-        navigate(`/dashboard/classroom/${response.course.id}`);
+        navigate(`/dashboard/classroom/${response.classroom.id}`);
+      } else {
+        toast.warning("❌ Inscription échoué", {
+          description: "Le code du classroom est invalide !",
+        });
       }
     } catch (error) {
       console.log(error);
@@ -78,10 +83,7 @@ export default function JoinClassroom() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="flex items-center gap-1 h-8 px-2 py-4 border border-input bg-background hover:bg-accent hover:text-accent-foreground rounded-sm text-xs font-light cursor-pointer"
-        >
+        <Button className="flex items-center gap-1 h-8 px-2 py-4 rounded-sm text-xs font-light cursor-pointer">
           <School2 className="size-4" />
           Rejoindre un classroom
         </Button>

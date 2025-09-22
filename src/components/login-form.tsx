@@ -78,14 +78,13 @@ export function LoginForm({
           toast("✅ Inscription réussie 🎉", {
             description: "Redirection vers la page de connexion...",
           });
-          navigate("/login");
+          navigate("/");
         } else {
           setToken(response.token);
           setUser(response.user);
           toast("✅ Connexion réussie 🎉", {
             description: "Redirection vers le tableau de bord...",
           });
-          navigate("/dashboard");
         }
       } else if (request.status == 401) {
         if (register) {
@@ -121,7 +120,7 @@ export function LoginForm({
             {register ? (
               <div className="text-center text-sm text-muted-foreground">
                 Vous avez déjà un compte ?{" "}
-                <a href="/login" className="underline underline-offset-4">
+                <a href="/" className="underline underline-offset-4">
                   Se connecter
                 </a>
               </div>
@@ -158,7 +157,17 @@ export function LoginForm({
               />
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="password">Mot de passe</Label>
+              <div className="flex items-center">
+                <Label htmlFor="password">Mot de passe</Label>
+                {!register && (
+                  <a
+                    href="/forgot_password"
+                    className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
+                  >
+                    Mot de passe oublié ?
+                  </a>
+                )}
+              </div>
               <Input
                 id="password"
                 type="password"
@@ -206,11 +215,6 @@ export function LoginForm({
           </div>
         </div>
       </form>
-      {/* <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        En continuant, vous acceptez nos{" "}
-        <a href="#">conditions d'utilisation</a> et notre{" "}
-        <a href="#">Politique de confidentialité</a>.
-      </div> */}
     </div>
   );
 }

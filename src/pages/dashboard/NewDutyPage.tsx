@@ -1,4 +1,4 @@
-import HomeWorkForm from "@/components/HomeWorkForm";
+import DutyForm from "@/components/DutyForm";
 import JoinClassroom from "@/components/JoinClassroom";
 import {
   Breadcrumb,
@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
-import type { Classroom } from "@/types/ClassroomType";
+import type { Classroom } from "@/types/Classroom";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -29,12 +29,15 @@ export default function NewHomeWorkPage() {
     const fetchClassroomDetails = async () => {
       if (!token) return;
       try {
-        const request = await fetch(baseUrl + "/courses/" + params.courseId, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const request = await fetch(
+          baseUrl + "/classrooms/" + params.classroomId,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const response = await request.json();
         setClassroomDetails(response);
       } catch (error) {
@@ -87,7 +90,7 @@ export default function NewHomeWorkPage() {
       <div className="flex flex-1 flex-col items-center justify-center min-h-[80vh] gap-4 p-4 pt-0">
         <Card className="w-[550px] mb-16">
           <CardContent>
-            <HomeWorkForm classroom={classroomDetails} />
+            <DutyForm classroom={classroomDetails} />
           </CardContent>
         </Card>
       </div>

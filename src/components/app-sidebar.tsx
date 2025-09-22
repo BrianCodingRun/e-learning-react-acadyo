@@ -12,7 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAuthStore } from "@/store/auth";
-import type { Classrooms } from "../types/ClassroomType";
+import type { Classrooms } from "../types/Classroom";
 import { Badge } from "./ui/badge";
 
 // This is sample data.
@@ -28,8 +28,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         const baseUrl = import.meta.env.VITE_URL_API;
         const fetchApi =
           user.roles[0] == "ROLE_TEACHER"
-            ? "/courses"
-            : "/enrollment/my-courses";
+            ? "/classrooms"
+            : "/enrollment/my-classrooms";
         const request = await fetch(baseUrl + fetchApi, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,8 +37,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
         });
         const response = await request.json();
-        if (response.courses) {
-          setClassroomData(response.courses);
+        if (response.classrooms) {
+          setClassroomData(response.classrooms);
         }
         if (response.member) {
           setClassroomData(response.member);
@@ -50,11 +50,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     fetchClassroom();
   }, [token, user]);
 
-  const courseItems =
+  const classroomItems =
     classroomData &&
-    classroomData.map((course) => ({
-      title: course.title,
-      url: `/dashboard/classroom/${course.id}`,
+    classroomData.map((classroom) => ({
+      title: classroom.title,
+      url: `/dashboard/classroom/${classroom.id}`,
     }));
 
   const data = {
@@ -65,14 +65,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             url: "#",
             icon: Presentation,
             isActive: true,
-            items: courseItems,
+            items: classroomItems,
           }
         : {
             title: "Cours inscrit",
             url: "#",
             icon: School,
             isActive: true,
-            items: courseItems,
+            items: classroomItems,
           },
     ],
   };

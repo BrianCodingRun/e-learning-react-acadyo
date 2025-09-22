@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/auth";
-import type { Classroom } from "@/types/ClassroomType";
+import type { Classroom } from "@/types/Classroom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircle } from "lucide-react";
 import { useState } from "react";
@@ -82,8 +82,8 @@ export default function CourseForm({
         formData.append("content", values.content);
       }
       formData.append("file", values.file); // ⬅️ fichier brut
-      formData.append("course", classroom?.["@id"] || "");
-      const request = await fetch(baseUrl + "/lessons", {
+      formData.append("classroom", classroom?.["@id"] || "");
+      const request = await fetch(baseUrl + "/courses", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -104,6 +104,10 @@ export default function CourseForm({
       }
     } catch (error) {
       console.log(error);
+      toast.warning("❌ Une erreur est survenue", {
+        className: "error",
+        description: "Une erreur inconnue est survenue, réessayer plus tard !",
+      });
     } finally {
       setIsLoading(false);
     }

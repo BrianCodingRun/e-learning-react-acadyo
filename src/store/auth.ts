@@ -1,6 +1,7 @@
 import type { User } from "@/types/User";
+import Cookies from "js-cookie";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
 export type Auth = {
   token: string;
@@ -13,8 +14,11 @@ export type Auth = {
 export const useAuthStore = create<Auth>()(
   persist(
     (set) => ({
-      token: "",
-      setToken: (token) => set({ token }),
+      token: Cookies.get("token") || "", // lecture du token depuis le cookie
+      setToken: (token) => {
+        Cookies.set("token", token, { expires: 1, secure: true }); // sauvegarde en cookie (7 jours)
+        set({ token });
+      },
       user: {
         id: "",
         name: "",
@@ -22,7 +26,8 @@ export const useAuthStore = create<Auth>()(
         roles: [],
       },
       setUser: (user) => set({ user }),
-      logout: () =>
+      logout: () => {
+        Cookies.remove("token"); // suppression du cookie
         set({
           token: "",
           user: {
@@ -31,11 +36,13 @@ export const useAuthStore = create<Auth>()(
             email: "",
             roles: [],
           },
-        }),
+        });
+      },
     }),
     {
-      name: "auth-user",
-      storage: createJSONStorage(() => sessionStorage),
+      name: "auth-user", // ⚠️ ce nom concerne uniquement le user
+      partialize: (state) => ({ user: state.user }),
+      // on dit à persist de ne stocker que "user" (le token est déjà dans le cookie)
     }
   )
 );

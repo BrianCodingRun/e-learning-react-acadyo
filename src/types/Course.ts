@@ -5,7 +5,7 @@ export type Courses = {
   content: string;
   filePath: string;
   studentsCount: number;
-  course: string;
+  classroom: string;
   createdAt: string;
 }[];
 
@@ -15,32 +15,6 @@ export type Course = {
   content: string;
   filePath: string;
   studentsCount: number;
-  course: string;
+  classroom: string;
   createdAt: string;
-};
-
-export type HomeWork = {
-  "@id": string;
-  id: string;
-  title: string;
-  instruction: string;
-  dueDate: string;
-  course: string;
-  assignedTo: string[];
-  createdAt: string;
-  updatedAt: string;
-  submissions: string[];
-}[];
-
-export type Duty = {
-  "@id": string;
-  id: string;
-  title: string;
-  instruction: string;
-  dueDate: string;
-  course: string;
-  assignedTo: string[];
-  createdAt: string;
-  updatedAt: string;
-  submissions: string[];
 };

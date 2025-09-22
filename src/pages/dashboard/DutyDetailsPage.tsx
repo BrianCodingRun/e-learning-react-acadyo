@@ -1,4 +1,5 @@
 import DutyDetailsComponent from "@/components/DutyDetailsComponent";
+import DutyDetailsLoading from "@/components/DutyDetailsLoading";
 import JoinClassroom from "@/components/JoinClassroom";
 import {
   Breadcrumb,
@@ -22,8 +23,8 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuthStore } from "@/store/auth";
-import type { Classroom } from "@/types/ClassroomType";
-import type { Duty } from "@/types/Course";
+import type { Classroom } from "@/types/Classroom";
+import type { Duty } from "@/types/Duty";
 import { List, Plus, Presentation } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
@@ -33,6 +34,7 @@ export default function DutyDetailsPage() {
   const { token, user } = useAuthStore();
   const [classroomDetails, setClassroomDetails] = useState<Classroom>();
   const [dutyDetails, setDutyDetails] = useState<Duty>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const baseUrl = import.meta.env.VITE_URL_API;
@@ -40,7 +42,7 @@ export default function DutyDetailsPage() {
       if (!token) return;
       try {
         const request = await fetch(
-          baseUrl + "/courses/" + params.classroomId,
+          baseUrl + "/classrooms/" + params.classroomId,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,21 +58,21 @@ export default function DutyDetailsPage() {
     };
     const fetchDutyDetails = async () => {
       if (!token) return;
+      setIsLoading(true);
       try {
-        const request = await fetch(
-          `https://localhost:8000/api/assignments/${params.dutyId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const request = await fetch(`${baseUrl}/assignments/${params.dutyId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         const response = await request.json();
         console.log(response);
         setDutyDetails(response);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchClassroomDetails();
@@ -154,7 +156,11 @@ export default function DutyDetailsPage() {
             </DropdownMenu>
           </div>
         )}
-        {dutyDetails && <DutyDetailsComponent duty={dutyDetails} />}
+        {!isLoading ? (
+          dutyDetails && <DutyDetailsComponent duty={dutyDetails} />
+        ) : (
+          <DutyDetailsLoading />
+        )}
       </div>
     </SidebarInset>
   );

@@ -57,6 +57,19 @@
   --spacing: 0.25rem;
 }
 
+@theme {
+  --animate-loading: loading 1s ease-in-out infinite;
+  @keyframes loading {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
 .dark {
   --background: oklch(0.1405 0.0044 285.8238);
   --foreground: oklch(0.9848 0 0);

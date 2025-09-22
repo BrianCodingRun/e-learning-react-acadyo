@@ -6,7 +6,7 @@ export type Classrooms = {
   code: string;
   teacher: string[];
   studentsCount: number;
-  lessonsCount: number;
+  coursesCount: number;
   assignmentsCount: number;
   createdAt: string;
 }[];
@@ -19,7 +19,7 @@ export type Classroom = {
   code: string;
   teacher: string[];
   studentsCount: number;
-  lessonsCount: number;
+  coursesCount: number;
   assignmentsCount: number;
   createdAt: string;
 };
