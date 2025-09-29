@@ -68,7 +68,7 @@ export function ClassroomTabs({
           )}
         </div>
       </div>
-      {user.roles[0] == "ROLE_TEACHER" && (
+      {user.roles[0] == "ROLE_ADMIN" && "ROLE_TEACHER" && (
         <div className="flex justify-start">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -29,7 +29,7 @@ export default function CourseForm({
   className?: string;
   props?: React.ComponentProps<"div">;
 }) {
-  const MAX_FILE_SIZE = 5000000;
+  // const MAX_FILE_SIZE = 5000000;
 
   const formSchema = z.object({
     title: z
@@ -41,14 +41,7 @@ export default function CourseForm({
         message: "Le titre ne doit pas dépasser cinquante caractères.",
       }),
     content: z.string().optional(),
-    file: z
-      .any()
-      .refine((file) => file instanceof File, {
-        message: "Un fichier est requis.",
-      })
-      .refine((file) => file.size <= MAX_FILE_SIZE, {
-        message: "La taille maximale est de 5 Mo.",
-      }),
+    file: z.any().optional(),
   });
 
   const { token } = useAuthStore();

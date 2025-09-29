@@ -6,9 +6,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        VITE_URL_API: http://localhost:8000/api # On pointe vers le service backend
+        VITE_URL_API: ${VITE_URL_API} # On pointe vers le service backend
     ports:
-      - "80:80" # Expose sur le port 80 en prod
+      - "5173:80" # Expose sur le port 80 en prod
     networks:
       - npm-network
     restart: unless-stopped

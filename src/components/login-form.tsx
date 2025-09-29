@@ -51,7 +51,7 @@ export function LoginForm({
     }
     try {
       const baseUrl = import.meta.env.VITE_URL_API;
-      const raw = register
+      const raw = register // En fonction de la route si l'utilisateur est sur la page de connexion ou d'inscription (/register)
         ? JSON.stringify({
             name: state.name,
             email: state.email,

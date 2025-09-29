@@ -3,7 +3,7 @@ import bgCourse from "@/assets/learning-bg-card.png";
 import ClassroomCard from "@/components/ClassroomCard";
 import EmptyFolder from "@/components/EmptyFolder";
 import JoinClassroom from "@/components/JoinClassroom";
-import LoadingGrid from "@/components/LoadingGrid"; // <--- nouvel import
+import LoadingGrid from "@/components/LoadingGrid";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,7 +30,7 @@ export default function DashboardPage() {
       try {
         const baseUrl = import.meta.env.VITE_URL_API; // https://localhost:8000/api
         const fetchApi =
-          user.roles[0] == "ROLE_TEACHER"
+          user.roles[0] == "ROLE_ADMIN" && "ROLE_TEACHER"
             ? "/classrooms"
             : "/enrollment/my-classrooms";
         const request = await fetch(baseUrl + fetchApi, {

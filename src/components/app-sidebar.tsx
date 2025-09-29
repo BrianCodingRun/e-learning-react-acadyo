@@ -27,7 +27,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         if (!token) return;
         const baseUrl = import.meta.env.VITE_URL_API;
         const fetchApi =
-          user.roles[0] == "ROLE_TEACHER"
+          user.roles[0] == "ROLE_ADMIN" && "ROLE_TEACHER"
             ? "/classrooms"
             : "/enrollment/my-classrooms";
         const request = await fetch(baseUrl + fetchApi, {
@@ -59,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const data = {
     navMain: [
-      user.roles[0] == "ROLE_TEACHER"
+      user.roles[0] == "ROLE_ADMIN" && "ROLE_TEACHER"
         ? {
             title: "Mes cours",
             url: "#",

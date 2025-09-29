@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            set -e
+            cd e-learning-react-acadyo
+
+            echo "🔄 Mise à jour du code source..."
+            eval "$(ssh-agent -s)"
+            git pull origin main
+
+            echo "🛑 Arrêt des anciens containers..."
+            docker compose down
+
+            echo "🧹 Nettoyage des anciennes images..."
+            docker system prune -f
+
+            echo "🚀 Démarrage des nouveaux containers..."
+            APP_ENV=prod docker compose up -d --build
+
+            echo "⏳ Attente du démarrage des services..."
+            sleep 30
+
+            echo "🔍 Vérification du statut des containers..."
+            docker compose ps
+
+            echo "✅ Déploiement terminé avec succès !"
+
+  notify:
+    runs-on: ubuntu-24.04
+    needs: [deploy]
+    if: always()
+
+    steps:
+      - name: Notify deployment result
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+              echo "✅ Déploiement réussi sur ${{ secrets.SERVER_HOST }}"
+          else
+              echo "❌ Échec du déploiement"
+              exit 1
+          fi

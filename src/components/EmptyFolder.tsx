@@ -51,7 +51,7 @@ export default function EmptyFolder({
           <p className="text-gray-500 dark:text-gray-400 mb-4 max-w-md">
             {message}
           </p>
-          {user.roles[0] == "ROLE_TEACHER"
+          {user.roles[0] == "ROLE_ADMIN" && "ROLE_TEACHER"
             ? action && (
                 <div
                   className="flex items-center gap-1 h-8 px-2 py-4 mb-8 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors"

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/store/auth";
 import type { Duty } from "@/types/Duty";
-import { Paperclip, Plus } from "lucide-react";
+import { LoaderCircle, Paperclip, Plus } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -31,6 +31,7 @@ type FilePreview = {
 export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
   const { user, token } = useAuthStore();
   const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const baseUrl = import.meta.env.VITE_URL_API;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,14 +69,23 @@ export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
   }, [fetchDutyRendered]);
 
   const handleSubmit = async () => {
+    setIsLoading(true);
     if (!filePreview?.file) {
       toast.error("Aucun fichier sélectionné.");
       return;
+    } else {
+      toast("🔄 Envoi en cours...", {
+        description: (
+          <div className="flex items-center gap-2">
+            <LoaderCircle className="h-4 w-4 animate-spin" />
+            Le devoir est cours d'envoi !
+          </div>
+        ),
+      });
     }
 
     const formData = new FormData();
 
-    // Tu dois fournir les valeurs correctes selon l'API Platform
     formData.append("file", filePreview.file); // fichier
     formData.append("student", `/api/users/${user.id}`); // Relation vers User
     formData.append("assignment", duty["@id"]); // Relation vers Duty (Assignment)
@@ -84,6 +94,9 @@ export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
     try {
       const response = await fetch(`${baseUrl}/dutyRendered`, {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 
@@ -99,6 +112,8 @@ export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
     } catch (error) {
       console.error("Erreur réseau:", error);
       toast.error("Erreur réseau lors de l'envoi.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -219,7 +234,10 @@ export default function DutyDetailsComponent({ duty }: { duty: Duty }) {
                   disabled={!filePreview}
                   onClick={handleSubmit}
                 >
-                  Rendre
+                  {isLoading
+                    ? <LoaderCircle className="h-4 w-4 animate-spin" /> +
+                      " En cours d'envoi"
+                    : "Rendre"}
                 </Button>
               </div>
             </div>
