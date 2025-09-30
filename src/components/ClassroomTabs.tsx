@@ -53,7 +53,7 @@ export function ClassroomTabs({
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
       <div className="flex md:flex-row flex-col gap-4 md:items-center justify-between">
         <div className="flex flex-col gap-2">
-          <Badge className="rounded-sm">
+          <Badge className="rounded-sm text-neutral-800">
             Code du classroom:
             {!isLoading ? (
               <strong>{classroomDetails?.code}</strong>

@@ -28,7 +28,7 @@ export default function CourseCard({
             {course.content.substring(0, 20)}
           </p>
         )}
-        <div className="p-2 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
+        <div className="p-2 bg-primary text-neutral-800 rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
           <a href={`/dashboard/classroom/${classroomId}/courses/${course.id}`}>
             Accéder
           </a>

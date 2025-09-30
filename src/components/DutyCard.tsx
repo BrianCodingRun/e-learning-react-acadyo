@@ -26,7 +26,7 @@ export default function DutyCard({
         <p className="text-xs text-muted-foreground my-1">
           {duty.instruction.substring(0, 20)}
         </p>
-        <div className="p-2 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
+        <div className="p-2 bg-primary text-neutral-800 rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
           <a href={`/dashboard/classroom/${classroomId}/duty/${duty.id}`}>
             Accéder
           </a>

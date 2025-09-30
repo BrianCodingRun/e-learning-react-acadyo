@@ -24,7 +24,7 @@ export default function ClassroomCard({
         <p className="text-xs text-muted-foreground my-1">
           {classroom.description.substring(0, 20)}
         </p>
-        <div className="p-2 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90 transition-colors">
+        <div className="p-2 bg-primary rounded-sm text-xs text-neutral-800 font-semibold hover:bg-primary/90 transition-colors">
           <a href={`/dashboard/classroom/${classroom.id}`}>Accéder</a>
         </div>
       </CardContent>

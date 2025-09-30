@@ -55,7 +55,7 @@ export function ClassroomHeader({
         ) : (
           <>
             <DeleteClassroom id={classroomId} />
-            <div className="flex items-center gap-1 h-8 px-2 py-4 bg-primary text-primary-foreground rounded-sm text-xs font-semibold hover:bg-primary/90">
+            <div className="flex items-center gap-1 h-8 px-2 py-4 bg-primary text-neutral-800 rounded-sm text-xs font-semibold hover:bg-primary/90">
               <Plus className="size-4" />
               <a href="/dashboard/classroom/add">Créer un classroom</a>
             </div>

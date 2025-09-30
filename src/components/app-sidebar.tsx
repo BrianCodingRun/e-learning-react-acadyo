@@ -85,7 +85,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
           <div className="flex items-center gap-1">
-            <Badge className="w-8 h-8 text-md font-bold">A</Badge>
+            <Badge className="w-8 h-8 text-md font-bold text-neutral-800">
+              A
+            </Badge>
             <span>Acadyo</span>
           </div>
         </SidebarMenuButton>

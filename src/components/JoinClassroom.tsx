@@ -83,7 +83,7 @@ export default function JoinClassroom() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-1 h-8 px-2 py-4 rounded-sm text-xs font-light cursor-pointer">
+        <Button className="flex items-center gap-1 h-8 px-2 py-4 rounded-sm text-xs font-light cursor-pointer text-neutral-800">
           <School2 className="size-4" />
           Rejoindre un classroom
         </Button>
@@ -92,7 +92,7 @@ export default function JoinClassroom() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className="flex flex-col gap-4 "
+            className="flex flex-col gap-4"
           >
             <DialogHeader>
               <DialogTitle>Rejoindre un classroom</DialogTitle>
@@ -120,7 +120,7 @@ export default function JoinClassroom() {
                   Annuler
                 </Button>
               </DialogClose>
-              <Button type="submit">
+              <Button type="submit" className="text-neutral-800">
                 {isLoading ? (
                   <LoaderCircle className="ml-2 h-4 w-4 animate-spin duration-500" />
                 ) : (

@@ -6,7 +6,8 @@ export type Courses = {
   filePath: string;
   studentsCount: number;
   classroom: string;
-  createdAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }[];
 
 export type Course = {
@@ -16,5 +17,6 @@ export type Course = {
   filePath: string;
   studentsCount: number;
   classroom: string;
-  createdAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

@@ -130,7 +130,10 @@ export default function ClassroomForm({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="self-start cursor-pointer w-32">
+            <Button
+              type="submit"
+              className="self-start cursor-pointer w-32 text-neutral-800"
+            >
               {isLoading ? (
                 <LoaderCircle className="ml-2 h-4 w-4 animate-spin duration-500" />
               ) : (
